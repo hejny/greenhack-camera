@@ -110,7 +110,7 @@ export async function main() {
 
             videoRecognitionCtx.drawImage(videoElement, 0, 0, videoRecognitionCtx.canvas.width, videoRecognitionCtx.canvas.height);
             const recognition = await recognizeFurnitureFromContext(videoRecognitionCtx);
-            //console.log({ recognition });
+            //console.log(JSON.stringify(recognition.map(([name, q]) => name)));
 
             resultsMaskCtx.clearRect(0, 0, resultsMaskCtx.canvas.width, resultsMaskCtx.canvas.height)
             resultsMaskCtx.font = "30px Verdana";
