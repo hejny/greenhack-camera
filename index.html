@@ -6,7 +6,16 @@
     <title>Greenhack cool camera</title>
 
     <link rel="stylesheet" type="text/css" href="./src/main.css">
+    <link rel="stylesheet" type="text/css" href="./src/furniture/furniture.css">
     </link>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.0/js/swiper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.14.2/tf.min.js"></script>
+    <script src="https://adrianodennanni.github.io/furniture_classifier/labels.js"></script>
+    <script src="./src/furniture/furniture.js"></script>
 </head>
 
 <body>
@@ -19,6 +28,216 @@
 
         main();
     </script>
+
+    <!----------------------------------------->
+
+
+    <div class="main">
+        <div class="container">
+            <article>
+                <h1 class="center">Furniture Classifier</h1>
+                <h2 class="subtitle center">with Tensorflow.js</h2>
+                <br />
+                <p>This demo loads a Deep Learning model able to classify furniture images into one of 128 categories.
+                    Choose an image or select one from your own computer to see the model running predictions in
+                    real-time in your browser!</p>
+                <br />
+            </article>
+            <div class="product-gallery">
+                <div class="product-photo-main">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/1.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/2.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/3.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/4.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/5.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/6.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/7.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/8.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/9.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/10.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/11.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/12.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <img id="imageFromUser">
+                                <div id="textInfoSendImage">
+                                    Use the menu on the right to use a photo from your computer!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+                <div class="tf-results">
+                    Select a image on the left
+                    <br>
+                    <b>OR</b>
+                    <br>
+                    <input type="file" id="userImageInput" onchange="startUserImage()"
+                        accept="image/x-png,image/jpg,image/jpeg" />
+                    <br>
+                    <br>
+                    <h1 id="results_title">Processing...</h1>
+                    <h2 id="first_place"></h2>
+                    <h4 id="second_place"></h4>
+                    <h4 id="third_place"></h4>
+                    <h4 id="fourth_place"></h4>
+                    <h4 id="fifth_place"></h4>
+                </div>
+                <div class="product-photos-side">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/1.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/2.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/3.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/4.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/5.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/6.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/7.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/8.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/9.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/10.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/11.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/images/12.jpg"
+                                        crossOrigin="anonymous">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="swiper-zoom-container">
+                                    <img src="https://adrianodennanni.github.io/furniture_classifier/upload_icon.png"
+                                        style="padding:15px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!----------------------------------------->
+
+
 </body>
 
 </html>
