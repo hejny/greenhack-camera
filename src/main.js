@@ -20,10 +20,13 @@ export async function main() {
     videoElement.setAttribute('autoPlay', true);
 
 
-
+    const videoRecognitionCtx = document.createElement('canvas').getContext('2d')
     const sceneCtx = document.getElementById('scene').getContext('2d')
     const maskCtx = document.createElement('canvas').getContext('2d')
     const maskedVideoCtx = document.createElement('canvas').getContext('2d')
+
+
+    document.getElementById('streams').appendChild(videoRecognitionCtx.canvas);
 
 
 
@@ -49,6 +52,8 @@ export async function main() {
     }
 
 
+
+
     const editor = new Editor(sceneCtx.canvas, maskCtx);
 
     const zone0 = new NegativeEffect()
@@ -59,23 +64,40 @@ export async function main() {
 
     //sceneCtx.globalAlpha = 0.9;
 
-    while (true) {
-        await forAnimationFrame();
+    ((async () => {
+        while (true) {
+            await forAnimationFrame();
 
-        sceneCtx.drawImage(videoElement, 0, 0);
-        zone0.apply(sceneCtx);
+            sceneCtx.drawImage(videoElement, 0, 0);
+            zone0.apply(sceneCtx);
 
-        maskedVideoCtx.globalCompositeOperation = 'source-over';
-        maskedVideoCtx.drawImage(videoElement, 0, 0);
-        zone1.apply(maskedVideoCtx);
-        maskedVideoCtx.globalCompositeOperation = 'destination-in';
-        maskedVideoCtx.drawImage(maskCtx.canvas, 0, 0);
+            maskedVideoCtx.globalCompositeOperation = 'source-over';
+            maskedVideoCtx.drawImage(videoElement, 0, 0);
+            zone1.apply(maskedVideoCtx);
+            maskedVideoCtx.globalCompositeOperation = 'destination-in';
+            maskedVideoCtx.drawImage(maskCtx.canvas, 0, 0);
 
-        sceneCtx.drawImage(maskedVideoCtx.canvas, 0, 0);
-        //sceneCtx.drawImage(maskCtx.canvas, 0, 0);
-    }
+            sceneCtx.drawImage(maskedVideoCtx.canvas, 0, 0);
+            //sceneCtx.drawImage(maskCtx.canvas, 0, 0);
+        }
+    })());
 
 
+
+    ((async () => {
+
+        videoRecognitionCtx.canvas.width = 224;
+        videoRecognitionCtx.canvas.height = 224;
+
+        while (true) {
+            //await forTime(1000);
+            await forAnimationFrame();
+
+            videoRecognitionCtx.drawImage(videoElement, 0, 0, videoRecognitionCtx.canvas.width, videoRecognitionCtx.canvas.height);
+            const recognition = await recognizeFurnitureFromContext(videoRecognitionCtx);
+            console.log({ recognition });
+        }
+    })());
 
 
 

@@ -109,6 +109,45 @@ async function inferImage(image) {
 
 }
 
+
 function buldLabel(response, index) {
     return response[index][0] + ": " + response[index][1].toFixed(4);
+}
+
+
+
+async function recognizeFurnitureFromContext(context) {
+
+
+    const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height/*224, 224*/);
+    const imagePixels = tf.fromPixels(imageData).expandDims(0).toFloat().div(tf.scalar(255));
+    const predictedArray = await model.predict(imagePixels).as1D().data();
+
+    let response = {}
+
+    for (i = 0; i <= 127; i++) {
+        if (Number.isFinite(response[labels[i][1]])) {
+            response[labels[i][1]] += predictedArray[i];
+        }
+        else {
+            response[labels[i][1]] = predictedArray[i];
+        }
+    };
+
+    response = Object.keys(response).map(item => [item, response[item]]);
+
+    response.sort(function (a, b) {
+        return a[1] < b[1] ? 1 : -1;
+    });
+
+    // Print top 5 on html elements
+    $("#results_title").text("Results");
+    $("#first_place").text(buldLabel(response, 0));
+    $("#second_place").text(buldLabel(response, 1));
+    $("#third_place").text(buldLabel(response, 2));
+    $("#fourth_place").text(buldLabel(response, 3));
+    $("#fifth_place").text(buldLabel(response, 4));
+
+    return response;
+
 }
