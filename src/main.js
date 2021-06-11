@@ -47,7 +47,7 @@ export async function main() {
         try {
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {
-                    width: window.innerWidth, height: window.innerHeight,
+                    //width: window.innerWidth, height: window.innerHeight,
                     ...constraints
                 }
             });
@@ -95,7 +95,7 @@ export async function main() {
         while (true) {
             await forAnimationFrame();
 
-
+            sceneCtx.globalCompositeOperation = 'source-over';
             sceneCtx.drawImage(videoElement, 0, 0);
             //zone0.apply(sceneCtx);
 
@@ -109,8 +109,11 @@ export async function main() {
             compositeMaskCtx.drawImage(resultsMaskCtx.canvas, 0, 0);
 
             //maskedVideoCtx.globalCompositeOperation = 'destination-in';
+
             maskedVideoCtx.drawImage(compositeMaskCtx.canvas, 0, 0);
 
+
+            sceneCtx.globalCompositeOperation = 'source-over'/* TODO: */;
             sceneCtx.drawImage(maskedVideoCtx.canvas, 0, 0);
 
 
