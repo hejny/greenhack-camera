@@ -11,7 +11,7 @@ export class Editor {
 
     init() {
 
-        this.ctx.lineWidth = 10;
+        this.ctx.lineWidth = 50;
         this.ctx.lineCap = 'round';
         //this.ctx.globalAlpha = 0.5;
 

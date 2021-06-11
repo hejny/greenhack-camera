@@ -1,5 +1,6 @@
 import { forTime, forAnimationFrame } from "https://cdn.skypack.dev/waitasecond@1.6.0";
 import { Editor } from "./classes/Editor.js";
+import { effect } from "./utils/effect.js";
 
 export async function main() {
 
@@ -14,10 +15,12 @@ export async function main() {
 
     const videoElement = document.createElement('video');
     videoElement.setAttribute('autoPlay', true);
-    const sceneElement = document.getElementById('scene');
-    const sceneContext = sceneElement.getContext('2d')
-    const maskElement = document.createElement('canvas');
-    const maskContext = maskElement.getContext('2d')
+
+
+
+    const sceneCtx = document.getElementById('scene').getContext('2d')
+    const maskCtx = document.createElement('canvas').getContext('2d')
+    const maskedVideoCtx = document.createElement('canvas').getContext('2d')
 
 
 
@@ -30,29 +33,38 @@ export async function main() {
     }
 
 
-    console.log({ stream })
+    // console.log({ stream })
     videoElement.srcObject = stream;
 
 
     await forTime(100/* for camera size init TODO: Smarter */);
 
 
-    sceneElement.width = videoElement.videoWidth;
-    sceneElement.height = videoElement.videoHeight;
-    maskElement.width = videoElement.videoWidth;
-    maskElement.height = videoElement.videoHeight;
-
-    const editor = new Editor(sceneElement, maskContext);
+    for (const { canvas } of [sceneCtx, maskCtx, maskedVideoCtx]) {
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+    }
 
 
+    const editor = new Editor(sceneCtx.canvas, maskCtx);
+
+    //sceneCtx.globalAlpha = 0.9;
 
     while (true) {
         await forAnimationFrame();
-        sceneContext.globalCompositeOperation = 'source-over';
-        sceneContext.drawImage(videoElement, 0, 0);
-        sceneContext.globalCompositeOperation = 'destination-out';
 
-        sceneContext.drawImage(maskElement, 0, 0);
+        sceneCtx.drawImage(videoElement, 0, 0);
+
+
+
+        maskedVideoCtx.globalCompositeOperation = 'source-over';
+        maskedVideoCtx.drawImage(videoElement, 0, 0);
+        effect(maskedVideoCtx);
+        maskedVideoCtx.globalCompositeOperation = 'destination-in';
+        maskedVideoCtx.drawImage(maskCtx.canvas, 0, 0);
+
+        sceneCtx.drawImage(maskedVideoCtx.canvas, 0, 0);
+        //sceneCtx.drawImage(maskCtx.canvas, 0, 0);
     }
 
 
