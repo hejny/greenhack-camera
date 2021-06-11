@@ -4,6 +4,14 @@ export class Effect {
         this.mapPoint = mapPoint;
     }
 
+
+    join(effect2) {
+        const effect1 = this;
+        return new Effect((input) => {
+            return effect2.mapPoint(effect1.mapPoint(input))
+        })
+    }
+
     apply(context) {
         let imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
         let dataArr = imageData.data;

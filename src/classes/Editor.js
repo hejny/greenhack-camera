@@ -26,7 +26,7 @@ export class Editor {
             const color = `white`;//'#' + Math.floor(Math.random() * 16777215).toString(16);
 
             touch.frameTuples({ itemsPerTuple: 2, startImmediately: true }).subscribe(([frame1, frame2]) => {
-                console.log([frame1, frame2]);
+                // console.log([frame1, frame2]);
                 this.ctx.strokeStyle = color;
                 this.ctx.beginPath();
                 this.ctx.moveTo(frame1.position.x, frame1.position.y);

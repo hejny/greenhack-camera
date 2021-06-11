@@ -2,6 +2,10 @@ import { forTime, forAnimationFrame } from "https://cdn.skypack.dev/waitasecond@
 import { Editor } from "./classes/Editor.js";
 import { Effect } from "./classes/Effect.js";
 
+const identityEffect = new Effect(({ r, g, b }) => { return ({ r: r, g: g, b: b }) });
+const negativeEffect = new Effect(({ r, g, b }) => { return ({ r: 255 - r, g: 255 - g, b: 255 - b }) });
+const grayscaleEffect = new Effect(({ r, g, b }) => { const a = (r + g + b) / 3; return ({ r: a, g: a, b: a }) });
+
 export async function main() {
 
 
@@ -48,8 +52,11 @@ export async function main() {
 
     const editor = new Editor(sceneCtx.canvas, maskCtx);
 
-    const zone0 = new Effect(({ r, g, b }) => { return ({ r: r, g:  g, b: b }) })
-    const zone1 = new Effect(({ r, g, b }) => { return ({ r: 255 - r, g: 255 - g, b: 255 - b }) })
+    const zone0 = negativeEffect
+        .join(new Effect(({ r, g, b }) => { return ({ r: r / 1.4, g: g / 1.4, b: b / 1.4 }) }))
+        .join(negativeEffect)
+        .join(grayscaleEffect);
+    const zone1 = identityEffect;
 
     //sceneCtx.globalAlpha = 0.9;
 
