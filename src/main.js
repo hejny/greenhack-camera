@@ -1,6 +1,6 @@
 import { forTime, forAnimationFrame } from "https://cdn.skypack.dev/waitasecond@1.6.0";
 import { Editor } from "./classes/Editor.js";
-import { effect } from "./utils/effect.js";
+import { Effect } from "./classes/Effect.js";
 
 export async function main() {
 
@@ -48,18 +48,20 @@ export async function main() {
 
     const editor = new Editor(sceneCtx.canvas, maskCtx);
 
+    const zone0 = new Effect(({ r, g, b }) => { return ({ r: r, g:  g, b: b }) })
+    const zone1 = new Effect(({ r, g, b }) => { return ({ r: 255 - r, g: 255 - g, b: 255 - b }) })
+
     //sceneCtx.globalAlpha = 0.9;
 
     while (true) {
         await forAnimationFrame();
 
         sceneCtx.drawImage(videoElement, 0, 0);
-
-
+        zone0.apply(sceneCtx);
 
         maskedVideoCtx.globalCompositeOperation = 'source-over';
         maskedVideoCtx.drawImage(videoElement, 0, 0);
-        effect(maskedVideoCtx);
+        zone1.apply(maskedVideoCtx);
         maskedVideoCtx.globalCompositeOperation = 'destination-in';
         maskedVideoCtx.drawImage(maskCtx.canvas, 0, 0);
 
