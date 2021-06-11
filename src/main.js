@@ -20,13 +20,20 @@ export async function main() {
     videoElement.setAttribute('autoPlay', true);
 
 
-    const videoRecognitionCtx = document.createElement('canvas').getContext('2d')
-    const sceneCtx = document.getElementById('scene').getContext('2d')
-    const maskCtx = document.createElement('canvas').getContext('2d')
-    const maskedVideoCtx = document.createElement('canvas').getContext('2d')
+    const videoRecognitionCtx = document.createElement('canvas').getContext('2d');
+    const sceneCtx = document.getElementById('scene').getContext('2d');
+    const editorMaskCtx = document.createElement('canvas').getContext('2d');
+    const compositeMaskCtx = document.createElement('canvas').getContext('2d');
+    const maskedVideoCtx = document.createElement('canvas').getContext('2d');
+    const resultsMaskCtx = document.createElement('canvas').getContext('2d');
 
 
-    document.getElementById('streams').appendChild(videoRecognitionCtx.canvas);
+    for (const [streamName, context] of Object.entries({ editorMaskCtx, compositeMaskCtx, maskedVideoCtx, videoRecognitionCtx, resultsMaskCtx })) {
+        const streamContainerElement = document.createElement('div');
+        streamContainerElement.innerHTML = `<h3>${streamName}</h3>`;
+        streamContainerElement.appendChild(context.canvas);
+        document.getElementById('streams').appendChild(streamContainerElement);
+    }
 
 
 
@@ -46,7 +53,7 @@ export async function main() {
     await forTime(100/* for camera size init TODO: Smarter */);
 
 
-    for (const { canvas } of [sceneCtx, maskCtx, maskedVideoCtx]) {
+    for (const { canvas } of [sceneCtx, editorMaskCtx, compositeMaskCtx, maskedVideoCtx, resultsMaskCtx]) {
         canvas.width = videoElement.videoWidth;
         canvas.height = videoElement.videoHeight;
     }
@@ -54,7 +61,7 @@ export async function main() {
 
 
 
-    const editor = new Editor(sceneCtx.canvas, maskCtx);
+    const editor = new Editor(sceneCtx.canvas, editorMaskCtx);
 
     const zone0 = new NegativeEffect()
         .join(new Effect(({ r, g, b }) => { return ({ r: r / 1.4, g: g / 1.4, b: b / 1.4 }) }))
@@ -74,8 +81,16 @@ export async function main() {
             maskedVideoCtx.globalCompositeOperation = 'source-over';
             maskedVideoCtx.drawImage(videoElement, 0, 0);
             zone1.apply(maskedVideoCtx);
+
+
+            compositeMaskCtx.clearRect(0, 0, compositeMaskCtx.canvas.width, compositeMaskCtx.canvas.height);
+            compositeMaskCtx.drawImage(editorMaskCtx.canvas, 0, 0);
+            compositeMaskCtx.drawImage(resultsMaskCtx.canvas, 0, 0);
+
             maskedVideoCtx.globalCompositeOperation = 'destination-in';
-            maskedVideoCtx.drawImage(maskCtx.canvas, 0, 0);
+            maskedVideoCtx.drawImage(compositeMaskCtx.canvas, 0, 0);
+
+
 
             sceneCtx.drawImage(maskedVideoCtx.canvas, 0, 0);
             //sceneCtx.drawImage(maskCtx.canvas, 0, 0);
@@ -95,7 +110,18 @@ export async function main() {
 
             videoRecognitionCtx.drawImage(videoElement, 0, 0, videoRecognitionCtx.canvas.width, videoRecognitionCtx.canvas.height);
             const recognition = await recognizeFurnitureFromContext(videoRecognitionCtx);
-            console.log({ recognition });
+            //console.log({ recognition });
+
+            resultsMaskCtx.clearRect(0, 0, resultsMaskCtx.canvas.width, resultsMaskCtx.canvas.height)
+            resultsMaskCtx.font = "30px Verdana";
+            // Create gradient
+            //const gradient = ctx.createLinearGradient(0, 0, c.width, 0);
+            //gradient.addColorStop("0", " magenta");
+            //gradient.addColorStop("0.5", "blue");
+            //gradient.addColorStop("1.0", "red");
+            // Fill with gradient
+            //maskCtx.fillStyle = gradient;
+            resultsMaskCtx.fillText(recognition[0][0], 10, 40);
         }
     })());
 

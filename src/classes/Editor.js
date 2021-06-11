@@ -23,7 +23,7 @@ export class Editor {
         });
 
         touchController.touches.subscribe((touch) => {
-            const color = `white`;//'#' + Math.floor(Math.random() * 16777215).toString(16);
+            const color = `black`;//'#' + Math.floor(Math.random() * 16777215).toString(16);
 
             touch.frameTuples({ itemsPerTuple: 2, startImmediately: true }).subscribe(([frame1, frame2]) => {
                 // console.log([frame1, frame2]);
