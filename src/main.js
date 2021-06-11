@@ -1,3 +1,4 @@
+import { forTime, forAnimationFrame } from "https://cdn.skypack.dev/waitasecond@1.6.0";
 
 export async function main() {
 
@@ -9,6 +10,7 @@ export async function main() {
 
 
     const videoElement = document.getElementById('videoElement');
+    const sceneElement = document.getElementById('scene');
 
     let stream;
     try {
@@ -22,6 +24,25 @@ export async function main() {
     console.log({ stream })
     videoElement.srcObject = stream;
 
+
+    await forTime(100/* for camera size init TODO: Smarter */);
+
+
+    sceneElement.width = videoElement.videoWidth;
+    sceneElement.height = videoElement.videoHeight;
+
+
+    while (true) {
+        await forAnimationFrame();
+        sceneElement.getContext('2d').drawImage(videoElement, 0, 0);
+    }
+
+
+
+
+
+
+    //return await (await fetch(canvas.toDataURL(type, quality))).blob();
 
 
 
