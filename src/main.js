@@ -95,25 +95,25 @@ export async function main() {
         while (true) {
             await forAnimationFrame();
 
-            sceneCtx.drawImage(videoElement, 0, 0);
-            zone0.apply(sceneCtx);
 
-            maskedVideoCtx.globalCompositeOperation = 'source-over';
+            sceneCtx.drawImage(videoElement, 0, 0);
+            //zone0.apply(sceneCtx);
+
+            //maskedVideoCtx.globalCompositeOperation = 'source-over';
             maskedVideoCtx.drawImage(videoElement, 0, 0);
-            zone1.apply(maskedVideoCtx);
+            //zone1.apply(maskedVideoCtx);
 
 
             compositeMaskCtx.clearRect(0, 0, compositeMaskCtx.canvas.width, compositeMaskCtx.canvas.height);
             compositeMaskCtx.drawImage(editorMaskCtx.canvas, 0, 0);
             compositeMaskCtx.drawImage(resultsMaskCtx.canvas, 0, 0);
 
-            maskedVideoCtx.globalCompositeOperation = 'destination-in';
+            //maskedVideoCtx.globalCompositeOperation = 'destination-in';
             maskedVideoCtx.drawImage(compositeMaskCtx.canvas, 0, 0);
 
-
-
             sceneCtx.drawImage(maskedVideoCtx.canvas, 0, 0);
-            //sceneCtx.drawImage(maskCtx.canvas, 0, 0);
+
+
         }
     })());
 
@@ -135,12 +135,12 @@ export async function main() {
             resultsMaskCtx.clearRect(0, 0, resultsMaskCtx.canvas.width, resultsMaskCtx.canvas.height)
             resultsMaskCtx.font = "30px Verdana";
             // Create gradient
-            //const gradient = ctx.createLinearGradient(0, 0, c.width, 0);
-            //gradient.addColorStop("0", " magenta");
-            //gradient.addColorStop("0.5", "blue");
-            //gradient.addColorStop("1.0", "red");
-            // Fill with gradient
-            //maskCtx.fillStyle = gradient;
+            const gradient = resultsMaskCtx.createLinearGradient(0, 0, resultsMaskCtx.canvas.width, 0);
+            gradient.addColorStop("0", " black");
+            gradient.addColorStop("0.5", "blue");
+            gradient.addColorStop("1.0", "red");
+
+            resultsMaskCtx.fillStyle = gradient;
             resultsMaskCtx.fillText(recognition[0][0], 10, 40);
         }
     })());
