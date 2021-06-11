@@ -38,9 +38,29 @@ export async function main() {
 
 
     let stream;
-    try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: { width: window.innerWidth, height: window.innerHeight } });
-    } catch (error) {
+
+    for (const constraints of [{
+        facingMode: {
+            exact: 'environment'
+        }
+    }, {}]) {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: window.innerWidth, height: window.innerHeight,
+                    ...constraints
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+
+        if (stream) {
+            break;
+        }
+
+    }
+    if (!stream) {
         alert(`Problem with your camera! Your camera is probbably in use.`);
         throw error;
     }
