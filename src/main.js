@@ -159,13 +159,15 @@ export async function main() {
 
             if (IkeaName) {
                 currentIkea = ikea;
+                document.getElementById('capture').style.opacity = 1;
             }
         }
     })());
 
 
+    document.getElementById('capture').style.opacity = 0.1;
     document.getElementById('capture').addEventListener('click', () => {
-        window.location = `?IkeaName=${currentIkea.IkeaName}`
+        window.postMessage(currentIkea.IkeaName, window.parent);
     })
 
 
