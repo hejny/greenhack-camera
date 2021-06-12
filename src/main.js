@@ -157,25 +157,21 @@ export async function main() {
             const ikea = ikeaNames.find((item) => item.Name === name);
             const { IkeaName, IkeaUrl } = ikea;
             
-            if (IkeaName) {
+            if (IkeaName && IkeaUrl) {
                 currentIkea = IkeaName;
                 currentName = name;
+                document.getElementById('capture').style.opacity = 1;
             }
 
             resultsMaskCtx.fillText(`${name} ${IkeaName ? `(${IkeaName})` : ''}`, 15, 20);
             resultsMaskCtx.fillText(`Found: ${currentName} ${currentIkea ? `(${currentIkea})` : ''}`, 15, 60);
-
-            if (IkeaName) {
-                currentIkea = ikea;
-                document.getElementById('capture').style.opacity = 1;
-            }
         }
     })());
 
 
     document.getElementById('capture').style.opacity = 0.1;
     document.getElementById('capture').addEventListener('click', () => {
-        if (currentIkea) {
+        if (currentIkea && document.getElementById('capture').style.opacity > 0.5) {
             window.parent.ikea(currentIkea);
             window.postMessage(currentIkea, window.parent);
             window.postMessage(currentIkea, '*');
