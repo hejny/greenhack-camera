@@ -157,8 +157,8 @@ export async function main() {
             const { IkeaName, IkeaUrl } = ikea;
 
             resultsMaskCtx.fillText(`${name} ${IkeaName === null ? '' : `(${IkeaName})`}`, 15, 20);
-            if (IkeaName)
-                resultsMaskCtx.fillText(`Found: ${name} ${IkeaName === null ? '' : `(${IkeaName})`}`, 15, 60);
+            if (IkeaName || (currentIkea && currentIkea.IkeaName))
+                resultsMaskCtx.fillText(`Found: ${name} (${IkeaName ? IkeaName : currentIkea.IkeaName})`, 15, 60);
 
             if (IkeaName) {
                 currentIkea = ikea;
