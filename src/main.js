@@ -143,7 +143,7 @@ export async function main() {
             //console.log(JSON.stringify(recognition.map(([name, q]) => name)));
 
             resultsMaskCtx.clearRect(0, 0, resultsMaskCtx.canvas.width, resultsMaskCtx.canvas.height)
-            resultsMaskCtx.font = "30px Open Sans";
+            resultsMaskCtx.font = "28px Open Sans";
             // Create gradient
             const gradient = resultsMaskCtx.createLinearGradient(0, 0, resultsMaskCtx.canvas.width, 0);
             gradient.addColorStop("0", "#003399");
@@ -163,8 +163,8 @@ export async function main() {
                 document.getElementById('capture').style.opacity = 1;
             }
 
-            resultsMaskCtx.fillText(`${name} ${IkeaName ? `(${IkeaName})` : ''}`, 15, 20);
-            resultsMaskCtx.fillText(`Found: ${currentName} ${currentIkea ? `(${currentIkea})` : ''}`, 15, 60);
+            resultsMaskCtx.fillText(`${name} ${IkeaName ? `(${IkeaName})` : ''}`, 15, 30);
+            resultsMaskCtx.fillText(`Found: ${currentName} ${currentIkea ? `(${currentIkea})` : ''}`, 15, 65);
         }
     })());
 
