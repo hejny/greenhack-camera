@@ -156,9 +156,9 @@ export async function main() {
             const ikea = ikeaNames.find((item) => item.Name === name);
             const { IkeaName, IkeaUrl } = ikea;
 
-
-            resultsMaskCtx.fillText(`Found: ${name} ${IkeaName === null ? '' : `(${IkeaName})`}`, 15, 20);
-            resultsMaskCtx.fillText(`${name} ${IkeaName === null ? '' : `(${IkeaName})`}`, 15, 60);
+            resultsMaskCtx.fillText(`${name} ${IkeaName === null ? '' : `(${IkeaName})`}`, 15, 20);
+            if (IkeaName)
+                resultsMaskCtx.fillText(`Found: ${name} ${IkeaName === null ? '' : `(${IkeaName})`}`, 15, 60);
 
             if (IkeaName) {
                 currentIkea = ikea;
