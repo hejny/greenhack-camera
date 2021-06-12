@@ -4,6 +4,7 @@ import { Effect } from "./classes/Effects/Effect.js";
 import { GrayscaleEffect } from "./classes/Effects/wellKnown/GrayscaleEffect.js";
 import { IdentityEffect } from "./classes/Effects/wellKnown/IdentityEffect.js";
 import { NegativeEffect } from "./classes/Effects/wellKnown/NegativeEffect.js";
+import { fetchIkeaNames } from "./misc/fetchIkeaNames.js";
 
 export async function main() {
 
@@ -18,6 +19,9 @@ export async function main() {
 
     const videoElement = document.createElement('video');
     videoElement.setAttribute('autoPlay', true);
+
+
+    const ikeaNames = await fetchIkeaNames();
 
 
     const videoRecognitionCtx = document.createElement('canvas').getContext('2d');
@@ -81,7 +85,7 @@ export async function main() {
 
 
 
-    const editor = new Editor(sceneCtx.canvas, editorMaskCtx);
+    // const editor = new Editor(sceneCtx.canvas, editorMaskCtx);
 
     const zone0 = new NegativeEffect()
         .join(new Effect(({ r, g, b }) => { return ({ r: r / 1.4, g: g / 1.4, b: b / 1.4 }) }))
@@ -121,7 +125,7 @@ export async function main() {
     })());
 
 
-
+    let currentIkea;
     ((async () => {
 
         videoRecognitionCtx.canvas.width = 224;
@@ -139,15 +143,30 @@ export async function main() {
             resultsMaskCtx.font = "30px Verdana";
             // Create gradient
             const gradient = resultsMaskCtx.createLinearGradient(0, 0, resultsMaskCtx.canvas.width, 0);
-            gradient.addColorStop("0", " black");
-            gradient.addColorStop("0.5", "blue");
-            gradient.addColorStop("1.0", "red");
+            gradient.addColorStop("0", "#003399");
+            gradient.addColorStop("1", "#003399"/*"#FFCC00"*/);
 
             resultsMaskCtx.fillStyle = gradient;
-            resultsMaskCtx.fillText(recognition[0][0], 10, 40);
+
+
+            const [name, confidency] = recognition[0];
+
+            const ikea = ikeaNames.find((item) => item.Name === name);
+            const { IkeaName, IkeaUrl } = ikea;
+
+
+            resultsMaskCtx.fillText(`${name}${IkeaName === null ? '' : `(${IkeaName})`}`, 10, 40);
+
+            if (IkeaName) {
+                currentIkea = ikea;
+            }
         }
     })());
 
+
+    document.getElementById('capture').addEventListener('click', () => {
+        window.location = `?IkeaName=${currentIkea.IkeaName}`
+    })
 
 
 

@@ -13,3 +13,35 @@ body{
 #streams{
     display: none;
 }
+
+#capture{
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translate(-50%,0);
+    padding: 10px;
+    border-radius: 666px;
+    border: 2px solid #FFCC00;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+#capture > *{
+    width: 60px;
+    height: 60px;
+    border-radius: 666px;
+    background-color: #003399;
+    transition: all 0.5s;
+}
+
+
+#capture:hover{
+    padding: 0px;
+    border: 10px solid #FFCC00;
+}
+
+
+#capture:hover > *{
+    width: 65px;
+    height: 65px;
+}

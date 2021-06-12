@@ -13,7 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.14.2/tf.min.js"></script>
     <script src="https://adrianodennanni.github.io/furniture_classifier/labels.js"></script>
-    <script src="./src/furniture/furniture.js"></script>
+    <script src="./src/misc/furniture.js"></script>
 </head>
 
 <body>
@@ -21,6 +21,12 @@
 
     <canvas id="scene"></canvas>
     <div id="streams"></div>
+
+    <div id="capture">
+        <div></div>
+    </div>
+
+    <div id="results"></div>
 
     <script type="module" async defer>
         import { main } from "./src/main.js";
