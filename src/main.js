@@ -143,7 +143,7 @@ export async function main() {
             //console.log(JSON.stringify(recognition.map(([name, q]) => name)));
 
             resultsMaskCtx.clearRect(0, 0, resultsMaskCtx.canvas.width, resultsMaskCtx.canvas.height)
-            resultsMaskCtx.font = "30px TypoPRO Open Sans";
+            resultsMaskCtx.font = "30px Open Sans";
             // Create gradient
             const gradient = resultsMaskCtx.createLinearGradient(0, 0, resultsMaskCtx.canvas.width, 0);
             gradient.addColorStop("0", "#003399");
