@@ -22,7 +22,9 @@ export async function main() {
 
 
     const ikeaNames = await fetchIkeaNames();
-
+    
+    const fnt = new FontFace('Font name', 'url(https://cdn.jsdelivr.net/npm/@typopro/web-open-sans@3.7.5/TypoPRO-OpenSans-Regular.ttf)');
+    await fnt.load();
 
     const videoRecognitionCtx = document.createElement('canvas').getContext('2d');
     const sceneCtx = document.getElementById('scene').getContext('2d');
@@ -140,7 +142,7 @@ export async function main() {
             //console.log(JSON.stringify(recognition.map(([name, q]) => name)));
 
             resultsMaskCtx.clearRect(0, 0, resultsMaskCtx.canvas.width, resultsMaskCtx.canvas.height)
-            resultsMaskCtx.font = "30px Verdana";
+            resultsMaskCtx.font = "30px TypoPRO Open Sans";
             // Create gradient
             const gradient = resultsMaskCtx.createLinearGradient(0, 0, resultsMaskCtx.canvas.width, 0);
             gradient.addColorStop("0", "#003399");
@@ -155,7 +157,8 @@ export async function main() {
             const { IkeaName, IkeaUrl } = ikea;
 
 
-            resultsMaskCtx.fillText(`${name}${IkeaName === null ? '' : `(${IkeaName})`}`, 10, 40);
+            resultsMaskCtx.fillText(`Found: ${name}${IkeaName === null ? '' : `(${IkeaName})`}`, 10, 20);
+            resultsMaskCtx.fillText(`${name}${IkeaName === null ? '' : `(${IkeaName})`}`, 30, 20);
 
             if (IkeaName) {
                 currentIkea = ikea;
@@ -167,7 +170,10 @@ export async function main() {
 
     document.getElementById('capture').style.opacity = 0.1;
     document.getElementById('capture').addEventListener('click', () => {
-        window.postMessage(currentIkea.IkeaName, window.parent);
+        if (currentIkea && currentIkea.IkeaName) {
+            window.postMessage(currentIkea.IkeaName, window.parent);
+            window.postMessage(currentIkea.IkeaName, '*');
+        }
     })
 
 
