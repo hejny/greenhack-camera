@@ -127,7 +127,8 @@ export async function main() {
     })());
 
 
-    let currentIkea;
+    let currentIkea = '';
+    let currentName = '';
     ((async () => {
 
         videoRecognitionCtx.canvas.width = 224;
@@ -155,10 +156,14 @@ export async function main() {
 
             const ikea = ikeaNames.find((item) => item.Name === name);
             const { IkeaName, IkeaUrl } = ikea;
+            
+            if (IkeaName) {
+                currentIkea = IkeaName;
+                currentName = name;
+            }
 
-            resultsMaskCtx.fillText(`${name} ${IkeaName === null ? '' : `(${IkeaName})`}`, 15, 20);
-            if (IkeaName || (currentIkea && currentIkea.IkeaName))
-                resultsMaskCtx.fillText(`Found: ${name} (${IkeaName ? IkeaName : currentIkea.IkeaName})`, 15, 60);
+            resultsMaskCtx.fillText(`${name} ${IkeaName ? `(${IkeaName})` : ''}`, 15, 20);
+            resultsMaskCtx.fillText(`Found: ${currentName} ${currentIkea ? `(${currentIkea})` : ''}`, 15, 60);
 
             if (IkeaName) {
                 currentIkea = ikea;
@@ -170,10 +175,10 @@ export async function main() {
 
     document.getElementById('capture').style.opacity = 0.1;
     document.getElementById('capture').addEventListener('click', () => {
-        if (currentIkea && currentIkea.IkeaName) {
-            window.parent.ikea(IkeaName);
-            window.postMessage(currentIkea.IkeaName, window.parent);
-            window.postMessage(currentIkea.IkeaName, '*');
+        if (currentIkea) {
+            window.parent.ikea(currentIkea);
+            window.postMessage(currentIkea, window.parent);
+            window.postMessage(currentIkea, '*');
         }
     })
 
