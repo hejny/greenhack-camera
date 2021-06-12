@@ -167,7 +167,7 @@ export async function main() {
 
     document.getElementById('capture').style.opacity = 0.1;
     document.getElementById('capture').addEventListener('click', () => {
-        window.postMessage(currentIkea.IkeaName, window.parent);
+        window.postMessage({ type: 'IKEA', ikeaName: currentIkea.IkeaName }, window.parent);
     })
 
 
